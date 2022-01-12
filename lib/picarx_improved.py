@@ -5,6 +5,7 @@ from pin import Pin
 from adc import ADC
 from filedb import fileDB
 import time
+
 try:
     from ezblock import *
     from ezblock import __reset_mcu__
@@ -13,16 +14,6 @@ try:
 except ImportError:
     print("Nah")
     from sim_ezblock import *
-# try:
-#     from ezblock import *
-#     from ezblock import __reset_mcu__
-#     __reset_mcu__()
-#     time.sleep(0.01)
-# except ImportError :
-#     print (" This computer does not appear to be a PiCar - X system\
-#     ( ezblock is not present ) . Shadowing hardware calls with\
-#     substitute functions ")
-#     from sim_ezblock import * 
 
 class Picarx(object):
     PERIOD = 4095
