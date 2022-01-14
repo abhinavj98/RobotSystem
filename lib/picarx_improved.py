@@ -33,8 +33,8 @@ class Picarx(object):
         self.camera_servo_pin2 = Servo(PWM('P1'))
         self.config_flie = fileDB('/home/pi/.config')
         self.dir_cal_value = int(self.config_flie.get("picarx_dir_servo", default_value=0))
-        self.cam_cal_value_1 = int(self.config_flie.get("picarx_cam1_servo", default_value=0))
-        self.cam_cal_value_2 = int(self.config_flie.get("picarx_cam2_servo", default_value=0))
+        self.cam_cal_value_1 = int(self.config_flie.get("picarx_cam1_servo", default_value=-70))
+        self.cam_cal_value_2 = int(self.config_flie.get("picarx_cam2_servo", default_value=50))
         self.dir_servo_pin.angle(self.dir_cal_value)
         self.camera_servo_pin1.angle(self.cam_cal_value_1)
         self.camera_servo_pin2.angle(self.cam_cal_value_2)
@@ -59,7 +59,7 @@ class Picarx(object):
         for pin in self.motor_speed_pins:
             pin.period(self.PERIOD)
             pin.prescaler(self.PRESCALER)
-
+        atexit.register(self.stop)
 
 
     def set_motor_speed(self,motor,speed):
@@ -189,8 +189,9 @@ class Picarx(object):
                 self.set_motor_speed(2, -1*speed )
         else:
             self.set_motor_speed(1, speed)
-            self.set_motor_speed(2, -1*speed)                  
+            self.set_motor_speed(2, -1*speed)
 
+    #@atexit.register
     def stop(self):
         self.set_motor_speed(1, 0)
         self.set_motor_speed(2, 0)
@@ -224,7 +225,9 @@ class Picarx(object):
 
 
 if __name__ == "__main__":
+    #atexit.register(px.stop)
     px = Picarx()
+    time.sleep(1)
     px.forward(50)
     time.sleep(1)
     px.stop()
