@@ -1,9 +1,4 @@
 # from ezblock import Servo,PWM,fileDB,Pin,ADC
-#from servo import Servo 
-#from pwm import PWM
-#from pin import Pin
-#from adc import ADC
-# from filedb import fileDB
 import time
 import logging
 from logdecorator import log_on_start , log_on_end , log_on_error
@@ -13,8 +8,13 @@ logging.basicConfig(format = logging_format, level = logging.INFO, datefmt ="%H:
 logging.getLogger().setLevel(logging.DEBUG)
 try:
     from ezblock import *
-    from ezblock import __reset_mcu__
-    __reset_mcu__()
+    from servo import Servo 
+    from pwm import PWM
+    from pin import Pin
+    from adc import ADC
+    from filedb import fileDB
+    # from ezblock import __reset_mcu__
+    # __reset_mcu__()
     time.sleep(0.01)
 except ImportError:
     print("Nah")
