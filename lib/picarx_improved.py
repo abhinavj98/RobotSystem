@@ -13,8 +13,8 @@ try:
     from pin import Pin
     from adc import ADC
     from filedb import fileDB
-    from utils import __reset_mcu__
-    __reset_mcu__()
+    from utils import reset_mcu
+    reset_mcu()
     time.sleep(0.01)
 except ImportError:
     print("Nah")
@@ -32,7 +32,7 @@ class Picarx(object):
         self.camera_servo_pin1 = Servo(PWM('P0'))
         self.camera_servo_pin2 = Servo(PWM('P1'))
         self.config_flie = fileDB('/home/pi/.config')
-        #Modified default values for calibration
+        #Modified default values for calibration (2.7.4)
         self.dir_cal_value = int(self.config_flie.get("picarx_dir_servo", default_value=-4))
         self.cam_cal_value_1 = int(self.config_flie.get("picarx_cam1_servo", default_value=-70))
         self.cam_cal_value_2 = int(self.config_flie.get("picarx_cam2_servo", default_value=50))
