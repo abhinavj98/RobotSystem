@@ -1,11 +1,16 @@
 # from ezblock import Servo,PWM,fileDB,Pin,ADC
-from servo import Servo 
-from pwm import PWM
-from pin import Pin
-from adc import ADC
-from filedb import fileDB
+#from servo import Servo 
+#from pwm import PWM
+#from pin import Pin
+#from adc import ADC
+# from filedb import fileDB
 import time
-
+import logging
+from logdecorator import log_on_start , log_on_end , log_on_error
+import atexit
+logging_format = "%(asctime)s: %(message)s"
+logging.basicConfig(format = logging_format, level = logging.INFO, datefmt ="%H: %M: %S")
+logging.getLogger().setLevel(logging.DEBUG)
 try:
     from ezblock import *
     from ezblock import __reset_mcu__
@@ -15,12 +20,14 @@ except ImportError:
     print("Nah")
     from sim_ezblock import *
 
+@log_on_start(logging.DEBUG , "Init PiCar")
 class Picarx(object):
     PERIOD = 4095
     PRESCALER = 10
     TIMEOUT = 0.02
 
     def __init__(self):
+        # logging.debug("Starting")
         self.dir_servo_pin = Servo(PWM('P2'))
         self.camera_servo_pin1 = Servo(PWM('P0'))
         self.camera_servo_pin2 = Servo(PWM('P1'))
