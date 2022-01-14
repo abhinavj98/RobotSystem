@@ -13,8 +13,8 @@ try:
     from pin import Pin
     from adc import ADC
     from filedb import fileDB
-    # from ezblock import __reset_mcu__
-    # __reset_mcu__()
+    from utils import __reset_mcu__
+    __reset_mcu__()
     time.sleep(0.01)
 except ImportError:
     print("Nah")
