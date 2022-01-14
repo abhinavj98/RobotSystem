@@ -32,6 +32,7 @@ class Picarx(object):
         self.camera_servo_pin1 = Servo(PWM('P0'))
         self.camera_servo_pin2 = Servo(PWM('P1'))
         self.config_flie = fileDB('/home/pi/.config')
+        #Modified default values for calibration
         self.dir_cal_value = int(self.config_flie.get("picarx_dir_servo", default_value=0))
         self.cam_cal_value_1 = int(self.config_flie.get("picarx_cam1_servo", default_value=-70))
         self.cam_cal_value_2 = int(self.config_flie.get("picarx_cam2_servo", default_value=50))
@@ -59,6 +60,7 @@ class Picarx(object):
         for pin in self.motor_speed_pins:
             pin.period(self.PERIOD)
             pin.prescaler(self.PRESCALER)
+        #Implementing the atexit function here
         atexit.register(self.stop)
 
 
@@ -70,8 +72,10 @@ class Picarx(object):
         elif speed < 0:
             direction = -1 * self.cali_dir_value[motor]
         speed = abs(speed)
-        if speed != 0:
-            speed = int(speed /2 ) + 50
+
+        #Removing the speed scaling to overcome friction
+        # if speed != 0:
+        #     speed = int(speed /2 ) + 50
         speed = speed - self.cali_speed_value[motor]
         if direction < 0:
             self.motor_direction_pins[motor].high()
@@ -160,6 +164,8 @@ class Picarx(object):
             # if abs_current_angle >= 0:
             if abs_current_angle > 40:
                 abs_current_angle = 40
+                
+            #Scaling happening with speed control for backward
             power_scale = (100 - abs_current_angle) / 100.0 
             print("power_scale:",power_scale)
             if (current_angle / abs_current_angle) > 0:
@@ -181,6 +187,7 @@ class Picarx(object):
                 abs_current_angle = 40
             power_scale = (100 - abs_current_angle) / 100.0 
             print("power_scale:",power_scale)
+            #Scaling happening with speed control for forward
             if (current_angle / abs_current_angle) > 0:
                 self.set_motor_speed(1, speed)
                 self.set_motor_speed(2, -1*speed * power_scale)
@@ -229,7 +236,7 @@ if __name__ == "__main__":
     px = Picarx()
     time.sleep(1)
     px.forward(50)
-    time.sleep(1)
+    time.sleep(3)
     px.stop()
     # set_dir_servo_angle(0)
     # time.sleep(1)
