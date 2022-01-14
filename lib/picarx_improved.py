@@ -19,7 +19,7 @@ try:
 except ImportError:
     print("Nah")
     from sim_ezblock import *
-
+#2.6
 @log_on_start(logging.DEBUG , "Init PiCar")
 class Picarx(object):
     PERIOD = 4095
@@ -33,7 +33,7 @@ class Picarx(object):
         self.camera_servo_pin2 = Servo(PWM('P1'))
         self.config_flie = fileDB('/home/pi/.config')
         #Modified default values for calibration
-        self.dir_cal_value = int(self.config_flie.get("picarx_dir_servo", default_value=0))
+        self.dir_cal_value = int(self.config_flie.get("picarx_dir_servo", default_value=-4))
         self.cam_cal_value_1 = int(self.config_flie.get("picarx_cam1_servo", default_value=-70))
         self.cam_cal_value_2 = int(self.config_flie.get("picarx_cam2_servo", default_value=50))
         self.dir_servo_pin.angle(self.dir_cal_value)
@@ -60,7 +60,7 @@ class Picarx(object):
         for pin in self.motor_speed_pins:
             pin.period(self.PERIOD)
             pin.prescaler(self.PRESCALER)
-        #Implementing the atexit function here
+        #Implementing the atexit function here (2.7.1 )
         atexit.register(self.stop)
 
 
@@ -73,7 +73,7 @@ class Picarx(object):
             direction = -1 * self.cali_dir_value[motor]
         speed = abs(speed)
 
-        #Removing the speed scaling to overcome friction
+        #Removing the speed scaling to overcome friction (2.7.2)
         # if speed != 0:
         #     speed = int(speed /2 ) + 50
         speed = speed - self.cali_speed_value[motor]
@@ -165,7 +165,7 @@ class Picarx(object):
             if abs_current_angle > 40:
                 abs_current_angle = 40
                 
-            #Scaling happening with speed control for backward
+            #Scaling happening with speed control for backward (2.7.3)
             power_scale = (100 - abs_current_angle) / 100.0 
             print("power_scale:",power_scale)
             if (current_angle / abs_current_angle) > 0:
@@ -187,7 +187,7 @@ class Picarx(object):
                 abs_current_angle = 40
             power_scale = (100 - abs_current_angle) / 100.0 
             print("power_scale:",power_scale)
-            #Scaling happening with speed control for forward
+            #Scaling happening with speed control for forward (2.7.3)
             if (current_angle / abs_current_angle) > 0:
                 self.set_motor_speed(1, speed)
                 self.set_motor_speed(2, -1*speed * power_scale)
@@ -198,7 +198,6 @@ class Picarx(object):
             self.set_motor_speed(1, speed)
             self.set_motor_speed(2, -1*speed)
 
-    #@atexit.register
     def stop(self):
         self.set_motor_speed(1, 0)
         self.set_motor_speed(2, 0)
@@ -232,7 +231,6 @@ class Picarx(object):
 
 
 if __name__ == "__main__":
-    #atexit.register(px.stop)
     px = Picarx()
     time.sleep(1)
     px.forward(50)
