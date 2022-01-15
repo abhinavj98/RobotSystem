@@ -32,15 +32,19 @@ def k_turn(px):
     #forward at 30 and whoosh
     px.set_dir_servo_angle(30)
     px.forward(50)
-    time.sleep(1.5)
+    time.sleep(1.25)
     px.set_dir_servo_angle(-30)
     time.sleep(0.2)
     px.backward(50)
     time.sleep(1)
+    px.set_dir_servo_angle(0)
+    time.sleep(0.2)
+    px.forward(50)
+    time.sleep(0.7)
     px.set_dir_servo_angle(30)
     time.sleep(0.2)
     px.forward(50)
-    time.sleep(0.5)
+    time.sleep(0.65)
     px.stop()
 
 #2.8.2
@@ -48,7 +52,7 @@ if __name__ == "__main__":
     keystroke = 'a'
     px = Picarx()
     time.sleep(1)
-    parallel_park(px)
+    k_turn(px)
     # while(keystroke != 'q'):
     #     keystroke = input("F, B, L, R, C, D")
     #     print(keystroke)
