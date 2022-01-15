@@ -1,0 +1,25 @@
+0000000000000000000000000000000000000000 139d197ed8631ee39624550e2b67b90e95f20f5c abhinav <abhinav@nevertellmetheodds.localdomain> 1642020126 -0700	clone: from git@github.com:abhinavj98/RobotSystem.git
+139d197ed8631ee39624550e2b67b90e95f20f5c 419ae7535adb45d9e5598341855b19190620d3fa abhinav <abhinav@nevertellmetheodds.localdomain> 1642020251 -0700	pull: Fast-forward
+419ae7535adb45d9e5598341855b19190620d3fa 1a63a1d5e279c0c78907e1244b95924650081d2b Abhinav <abhinav98jain@gmail.com> 1642021169 -0700	commit: Encoding issu
+1a63a1d5e279c0c78907e1244b95924650081d2b b1a0a2b1e2c4b2e32952aa0a73627032e2bc5b4a Abhinav <abhinav98jain@gmail.com> 1642022271 -0700	pull: Fast-forward
+b1a0a2b1e2c4b2e32952aa0a73627032e2bc5b4a e4b4141213ad5d822c99e26a16ee170a3f799477 Abhinav <abhinav98jain@gmail.com> 1642193529 -0800	commit: 2.6 done
+e4b4141213ad5d822c99e26a16ee170a3f799477 a7e6d59c4f51badbbc4c951c5a8b33ef58dd98a4 Abhinav <abhinav98jain@gmail.com> 1642195021 -0800	commit: 2.6 done + 1
+a7e6d59c4f51badbbc4c951c5a8b33ef58dd98a4 b5b44d84cd8469cb14efff3eae8311c258aff244 Abhinav <abhinav98jain@gmail.com> 1642196327 -0800	pull: Fast-forward
+b5b44d84cd8469cb14efff3eae8311c258aff244 466d7f440e1e84ac279451a83be661b88a84aa2f Abhinav <abhinav98jain@gmail.com> 1642196399 -0800	commit: Code improvement
+466d7f440e1e84ac279451a83be661b88a84aa2f 58eab060fe8f80ed89fc9255da29eee091738279 Abhinav <abhinav98jain@gmail.com> 1642196672 -0800	pull: Fast-forward
+58eab060fe8f80ed89fc9255da29eee091738279 ff63348d7a6829e67a4291e2c55a4ee9202aa07a Abhinav <abhinav98jain@gmail.com> 1642197852 -0800	commit: Calbrating steering
+ff63348d7a6829e67a4291e2c55a4ee9202aa07a 85b7f8eea617c570b153d8db9a55f6406f7fc97b Abhinav <abhinav98jain@gmail.com> 1642204085 -0800	commit: Calibration done
+85b7f8eea617c570b153d8db9a55f6406f7fc97b bd08b3f22a36942821ba71f634c83dd86fcc7727 Abhinav <abhinav98jain@gmail.com> 1642204223 -0800	commit: Calibration done
+bd08b3f22a36942821ba71f634c83dd86fcc7727 b1a4c002acd5dae2530af4c7fe414a4d0406b9e0 Abhinav <abhinav98jain@gmail.com> 1642207416 -0800	commit: parallel parking test
+b1a4c002acd5dae2530af4c7fe414a4d0406b9e0 ebb66f611978b3201a4b1b20329a640e9b73f18a Abhinav <abhinav98jain@gmail.com> 1642207492 -0800	commit: parallel parking test
+ebb66f611978b3201a4b1b20329a640e9b73f18a 04d8ace434b283911407c4db18e2177452e13b89 Abhinav <abhinav98jain@gmail.com> 1642207538 -0800	commit: parallel parking test
+04d8ace434b283911407c4db18e2177452e13b89 0ec223a8c96bc151883141bd8480224157f5a6ff Abhinav <abhinav98jain@gmail.com> 1642207602 -0800	commit: parallel parking test
+0ec223a8c96bc151883141bd8480224157f5a6ff 7af6fe33ea384b69be27ea2911997f48c7b36307 Abhinav <abhinav98jain@gmail.com> 1642207634 -0800	commit: parallel parking test
+7af6fe33ea384b69be27ea2911997f48c7b36307 d247c62ddfebf3c0c8712d638e4ed869f22fda43 Abhinav <abhinav98jain@gmail.com> 1642207682 -0800	commit: parallel parking test
+d247c62ddfebf3c0c8712d638e4ed869f22fda43 a1aa50c1fe5ab7e7d48c42cab25cd8e870850131 Abhinav <abhinav98jain@gmail.com> 1642207768 -0800	commit: parallel parking test
+a1aa50c1fe5ab7e7d48c42cab25cd8e870850131 a1aa50c1fe5ab7e7d48c42cab25cd8e870850131 Abhinav <abhinav98jain@gmail.com> 1642209830 -0800	reset: moving to HEAD
+a1aa50c1fe5ab7e7d48c42cab25cd8e870850131 0039b467364bb75adf70c05daeab903cc9bb9a85 Abhinav <abhinav98jain@gmail.com> 1642209833 -0800	pull: Fast-forward
+0039b467364bb75adf70c05daeab903cc9bb9a85 06c37a2477d1382751e7c3145ed0526213d37a17 Abhinav <abhinav98jain@gmail.com> 1642209886 -0800	commit: Init k turn
+06c37a2477d1382751e7c3145ed0526213d37a17 06c37a2477d1382751e7c3145ed0526213d37a17 Abhinav <abhinav98jain@gmail.com> 1642215862 -0800	reset: moving to HEAD
+06c37a2477d1382751e7c3145ed0526213d37a17 c9f6407159f40242fb3c1697cc9ac86716dc4d29 Abhinav <abhinav98jain@gmail.com> 1642215866 -0800	pull: Fast-forward
+c9f6407159f40242fb3c1697cc9ac86716dc4d29 3886be60a6f3e741ee76bd67b197629a8ca097d4 Abhinav <abhinav98jain@gmail.com> 1642215947 -0800	commit: Adding keyboard
