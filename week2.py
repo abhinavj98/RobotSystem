@@ -19,13 +19,29 @@ def parallel_park(px):
     time.sleep(0.2)
     px.backward(50)
     time.sleep(0.5)
-
     px.set_dir_servo_angle(0)
     time.sleep(0.2)
     px.forward(50)
     time.sleep(0.5)
     px.stop()
     
+
+def k_turn(px):
+    #forward at 30 till perp
+    #back at -30 till semi perp
+    #forward at 30 and whoosh
+    px.set_dir_servo_angle(30)
+    px.forward(50)
+    time.sleep(1.5)
+    px.set_dir_servo_angle(-30)
+    time.sleep(0.2)
+    px.backward(50)
+    time.sleep(1)
+    px.set_dir_servo_angle(30)
+    time.sleep(0.2)
+    px.forward(50)
+    time.sleep(0.5)
+    px.stop()
 
 #2.8.2
 if __name__ == "__main__":
