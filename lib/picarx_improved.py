@@ -60,7 +60,7 @@ class Picarx(object):
         for pin in self.motor_speed_pins:
             pin.period(self.PERIOD)
             pin.prescaler(self.PRESCALER)
-        #Implementing the atexit function here (2.7.1 )
+        #Implementing the atexit function here (2.7.1 ) also (2.9 self.cleanup)
         atexit.register(self.stop)
 
 
