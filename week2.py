@@ -16,7 +16,7 @@ def parallel_park(px):
     time.sleep(0.5)
     px.forward(70)
     time.sleep(0.2)
-    
+    px.stop()
     
 
 #2.8.2
@@ -25,12 +25,12 @@ if __name__ == "__main__":
     px = Picarx()
     time.sleep(1)
     parallel_park(px)
-    while(keystroke != 'q'):
-        keystroke = input("F, B, L, R, C, D")
-        print(keystroke)
-        if(keystroke == 'f'):
-            px.forward(50)
-        elif(keystroke == 'b'):
-            px.backward(50)
-        elif(keystroke == 'l'):#park left
-            px.backward(50)
+    # while(keystroke != 'q'):
+    #     keystroke = input("F, B, L, R, C, D")
+    #     print(keystroke)
+    #     if(keystroke == 'f'):
+    #         px.forward(50)
+    #     elif(keystroke == 'b'):
+    #         px.backward(50)
+    #     elif(keystroke == 'l'):#park left
+    #         px.backward(50)
