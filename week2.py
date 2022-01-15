@@ -8,6 +8,7 @@ def parallel_park(px):
     #go forward
     #steer 45 and back
     # go forward
+    px.set_dir_servo_angle(0)
     px.forward(70)
     time.sleep(0.5)
     px.set_dir_servo_angle(45)
