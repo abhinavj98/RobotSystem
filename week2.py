@@ -1,12 +1,8 @@
 import sys
-import time
 sys.path.insert(0, "./lib/")
-
 from lib.picarx_improved import *
 import sys
 import time
-sys.path.insert(0, "/home/abhinav/git/RobotSystem/lib/")
-
 from lib.picarx_improved import *
 
 def parallel_park(px, side):

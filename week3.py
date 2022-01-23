@@ -1,7 +1,7 @@
-from lib.picarx_improved import *
 import sys
+sys.path.insert(0, "./lib/")
+from lib.picarx_improved import *
 import time
-sys.path.insert(0, "/home/abhinav/git/RobotSystem/lib/")
 from utils import reset_mcu
 reset_mcu()
 from grayscale_module import Grayscale_Module
