@@ -42,6 +42,7 @@ class Controller():
             elif i < self.gm.min:
                 data[j] = self.gm.min
         loc = (data[2] - data[0])/data[1]
+        print(loc)
         return loc
 
 if __name__=='__main__':
@@ -49,11 +50,11 @@ if __name__=='__main__':
   try:
     gm = Grayscale_Module()
     p_control = Controller(gm)
-    px_power = 10
+    px_power = 30
     while True:
         steering_angle = p_control.get_location()*30
-        px.set_dir_servo_angle(-12)
+        px.set_dir_servo_angle(steering_angle)
         px.forward(px_power) 
-        time.sleep(0.3)
+        time.sleep(2)
   finally:
       px.stop()
