@@ -36,7 +36,8 @@ if __name__=='__main__':
     px_power = 10
     gm.calibrate()
     while True:
-        print(gm.get_grayscale_data())
+        data = gm.get_grayscale_data()
+        print((data[1] - data[0] + data[1] - data[2])/data[1])
         time.sleep(1)
   finally:
       px.stop()
