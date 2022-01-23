@@ -33,6 +33,7 @@ class Grayscale_Module(object):
 class Controller():
     def __init__(self, gm):
         self.gm = gm
+        self.loc = 0
     
     def get_location(self):
         data = self.gm.get_grayscale_data()
@@ -41,7 +42,8 @@ class Controller():
                 data[j]=self.gm.max
             elif i < self.gm.min:
                 data[j] = self.gm.min
-        loc = (data[2] - data[0])/data[1]
+        loc = 0.4*(data[2] - data[0])/data[1] + 0.6*self.loc
+        self.loc = loc
         print(loc)
         return loc
 
