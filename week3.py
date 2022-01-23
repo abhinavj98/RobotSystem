@@ -30,21 +30,30 @@ class Grayscale_Module(object):
         self.ref = sum(data)/len(data)
         return self.ref
 
+class Controller():
+    def __init__(self, gm):
+        self.gm = gm
+    
+    def get_location(self):
+        data = self.gm.get_grayscale_data()
+        for j,i in enumerate(data):
+            if i > self.gm.max:
+                data[j]=self.gm.max
+            elif i < self.gm.min:
+                data[j] = self.gm.min
+        loc = (data[2] - data[0])/data[1]
+        return loc
+
 if __name__=='__main__':
+  px = Picarx()
   try:
     gm = Grayscale_Module()
-    px = Picarx()
+    p_control = Controller(gm)
     px_power = 10
-    #gm.calibrate()
     while True:
-        data = gm.get_grayscale_data()
-        for j,i in enumerate(data):
-            if i > gm.max:
-                data[j]=gm.max
-            elif i < gm.min:
-                data[j] = gm.min
-        print(data)
-        print((data[2] - data[0])/data[1])
-        time.sleep(1)
+        steering_angle = p_control.get_location()*30
+        px.set_dir_servo_angle(-12)
+        px.forward(px_power) 
+        time.sleep(0.3)
   finally:
       px.stop()
