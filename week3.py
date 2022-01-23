@@ -42,21 +42,22 @@ class Controller():
                 data[j]=self.gm.max
             elif i < self.gm.min:
                 data[j] = self.gm.min
-        loc = 0.4*(data[2] - data[0])/data[1] + 0.6*self.loc
+        loc = 0.6*(data[2] - data[0])/data[1] + 0.4*self.loc
         self.loc = loc
         print(loc)
         return loc
+    
 
 if __name__=='__main__':
   px = Picarx()
   try:
     gm = Grayscale_Module()
     p_control = Controller(gm)
-    px_power = 30
+    px_power = 40
     while True:
-        steering_angle = p_control.get_location()*30
+        steering_angle = p_control.get_location()*40
         px.set_dir_servo_angle(steering_angle)
-        px.forward(px_power) 
-        time.sleep(2)
+        px.forward(px_power - abs(steering_angle)/4) 
+        #time.sleep(0.01)
   finally:
       px.stop()
