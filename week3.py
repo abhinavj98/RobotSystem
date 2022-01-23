@@ -8,17 +8,18 @@ import time
 # from adc import ADC
 
 class Grayscale_Module(object):
-    def __init__(self,ref = 0, target = 'light'):
+    def __init__(self, max = 1500, min = 750, target = 'light'):
         self.chn_0 = ADC("A0")
         self.chn_1 = ADC("A1")
         self.chn_2 = ADC("A2")
-        self.ref = ref
+        self.max =  max
+        self.min = min
 
     def get_grayscale_data(self):
         adc_value_list = []
-        adc_value_list.append(self.chn_0.read()-self.ref)
-        adc_value_list.append(self.chn_1.read()-self.ref)
-        adc_value_list.append(self.chn_2.read()-self.ref)
+        adc_value_list.append(self.chn_0.read())
+        adc_value_list.append(self.chn_1.read())
+        adc_value_list.append(self.chn_2.read())
         return adc_value_list
 
     def steering_angle(self):
@@ -31,13 +32,19 @@ class Grayscale_Module(object):
 
 if __name__=='__main__':
   try:
-    gm = Grayscale_Module(ref = 0)
+    gm = Grayscale_Module()
     px = Picarx()
     px_power = 10
-    gm.calibrate()
+    #gm.calibrate()
     while True:
         data = gm.get_grayscale_data()
-        print((data[1] - data[0] + data[1] - data[2])/data[1])
+        for j,i in enumerate(data):
+            if i > gm.max:
+                data[j]=gm.max
+            elif i < gm.min:
+                data[j] = gm.min
+        print(data)
+        print((data[2] - data[0])/data[1])
         time.sleep(1)
   finally:
       px.stop()
