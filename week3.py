@@ -2,10 +2,10 @@ import sys
 sys.path.insert(0, "./lib/")
 from lib.picarx_improved import *
 import time
-from utils import reset_mcu
-reset_mcu()
-from grayscale_module import Grayscale_Module
-from adc import ADC
+# from utils import reset_mcu
+# reset_mcu()
+# from grayscale_module import Grayscale_Module
+# from adc import ADC
 
 class Grayscale_Module(object):
     def __init__(self,ref = 0, target = 'light'):
@@ -22,7 +22,7 @@ class Grayscale_Module(object):
         return adc_value_list
 
     def steering_angle(self):
-        
+        pass
     
     def calibrate(self):
         data = self.get_grayscale_data()
@@ -36,7 +36,7 @@ if __name__=='__main__':
     px_power = 10
     gm.calibrate()
     while True:
-        print(GM.get_grayscale_data())
+        print(gm.get_grayscale_data())
         time.sleep(1)
   finally:
       px.stop()

@@ -1,6 +1,5 @@
 import sys
 sys.path.insert(0, "./lib/")
-from lib.picarx_improved import *
 import sys
 import time
 from lib.picarx_improved import *
