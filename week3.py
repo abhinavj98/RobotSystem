@@ -5,7 +5,6 @@ import time
 from utils import reset_mcu
 reset_mcu()
 from grayscale_module import Grayscale_Module
-from picarx import Picarx
 from adc import ADC
 
 class Grayscale_Module(object):
