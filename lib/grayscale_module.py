@@ -10,7 +10,7 @@ class Grayscale_Module(object):
 
     def get_line_status(self,fl_list):
 
-        if fl_list[0] > self.ref and fl_list[1] > self.ref and fl_list[2] > self.ref:
+        if fl_list[0] < self.ref and fl_list[1] < self.ref and fl_list[2] < self.ref:
             return 'stop'
             
         elif fl_list[1] <= self.ref:

@@ -1,2 +1,3 @@
 ezblock.py
 *.pyc
+__pycache__
