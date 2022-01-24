@@ -1,2 +1,3 @@
 logdecorator
 ezblock.py
+opencv-python
