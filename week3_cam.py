@@ -72,8 +72,10 @@ if __name__ == "__main__":
             for frame in camera.capture_continuous(rawCapture, format="bgr",use_video_port=True):# use_video_port=True
                 img = frame.array
                 x,y = detect_lane(img)
-                len_x, len_y = img.shape[0], img.shape[1]
-                angle = math.degrees(math.atan(len_x/2-x)/(len_y - y)))
+                k = cv2.waitKey(1)
+                len_x, len_y = img.shape[1], img.shape[0]
+                print(len_x,len_y)
+                angle = math.degrees(math.atan((len_x/2-x)/(len_y - y)))
                 print(angle)
             
                 rawCapture.truncate(0)
