@@ -10,7 +10,7 @@ from picamera import PiCamera
 import numpy as np
 from utils import run_command
 
-amera = PiCamera()
+camera = PiCamera()
 camera.resolution = (640,480)
 camera.framerate = 24
 camera.image_effect = "none"  #"none","negative","solarize","emboss","posterise","cartoon",
