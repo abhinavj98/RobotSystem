@@ -71,15 +71,18 @@ if __name__ == "__main__":
     try:
         while True:
             for frame in camera.capture_continuous(rawCapture, format="bgr",use_video_port=True):# use_video_port=True
-                img = frame.array
-                x,y = detect_lane(img)
-                k = cv2.waitKey(1)
-                len_x, len_y = img.shape[1], img.shape[0]
-                steering_angle = math.degrees(math.atan((len_x/2-x)/(len_y - y)))/2
-                if(abs(steering_angle)>40):
-                    steering_angle = steering_angle/abs(steering_angle)*40
-                print(steering_angle)
-                px.set_dir_servo_angle(-steering_angle)
+                try:
+                    img = frame.array
+                    x,y = detect_lane(img)
+                    k = cv2.waitKey(1)
+                    len_x, len_y = img.shape[1], img.shape[0]
+                    steering_angle = math.degrees(math.atan((len_x/2-x)/(len_y - y)))/2
+                    if(abs(steering_angle)>40):
+                        steering_angle = steering_angle/abs(steering_angle)*40
+                    print(steering_angle)
+                    px.set_dir_servo_angle(-steering_angle)
+                except ValueError:
+                    steering_angle = 0
                 px.forward(px_power - abs(steering_angle)/4)
                 rawCapture.truncate(0)
 
