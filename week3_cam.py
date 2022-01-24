@@ -25,8 +25,8 @@ try:
         for frame in camera.capture_continuous(rawCapture, format="bgr",use_video_port=True):# use_video_port=True
             img = frame.array
             hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-            lower_blue = np.array([60, 40, 40])
-            upper_blue = np.array([150, 255, 255])
+            lower_blue = np.array([90, 90, 50])
+            upper_blue = np.array([120, 180, 255])
             mask = cv2.inRange(hsv, lower_blue, upper_blue)
             cv2.imshow("mask", mask)   
             cv2.imshow("vid", img)
