@@ -48,8 +48,7 @@ def detect_lane(frame):
     x,y,w,h = cv2.boundingRect(c)
     print(x,y,w,h)
     # draw the biggest contour (c) in green
-    cv2.rectangle(output,(x,y),(x+w,y+h),(0,255,0),2)
-
+    cv2.circle(output,(int(x+w/2),int(y+h/2)),2,(0,255,0),4)
     cv2.imshow("cropped_image", output)
     return thresh
 
