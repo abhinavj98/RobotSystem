@@ -33,9 +33,8 @@ def detect_edges(frame):
     mask = cv2.inRange(hsv, lower_blue, upper_blue)
     
     # detect edges
-    edges = cv2.Canny(mask, 200, 400)
-   
-    return edges
+    #edges = cv2.Canny(mask, 200, 400)
+    return mask
 
 def detect_line_segments(cropped_edges):
     # tuning min_threshold, minLineLength, maxLineGap is a trial and error process by hand
@@ -108,6 +107,7 @@ def detect_lane(frame):
     
     edges = detect_edges(frame)
     cropped_edges = region_of_interest(edges)
+    cv2.imshow("cropped_image", cropped_edges)
     line_segments = detect_line_segments(cropped_edges)
     lane_lines = average_slope_intercept(frame, line_segments)
     
@@ -134,7 +134,7 @@ if __name__ == "__main__":
 
     power_val = 0
     px = Picarx()
-    px.set_camera_servo2_angle(-20)
+    px.set_camera_servo2_angle(-30)
     i=0
     time.sleep(2)
     try:
@@ -144,8 +144,8 @@ if __name__ == "__main__":
                 lane = detect_lane(img)
                 print(lane)
                 if(len(lane)!=0):
-                    lane_lines_image = display_lines(frame, lane)
-                    #cv2.imshow("lane lines", lane_lines_image)  
+                    lane_lines_image = display_lines(img, lane)
+                    cv2.imshow("lane lines", lane_lines_image)  
                 # cv2.imshow("edge", lane)
                 k = cv2.waitKey(1) & 0xFF
                 # 27 is ESC key
