@@ -66,7 +66,7 @@ if __name__ == "__main__":
     px = Picarx()
     px.set_camera_servo2_angle(-30)
     i=0
-    px_power = 30
+    px_power = 40
     time.sleep(2)
     try:
         while True:
@@ -75,9 +75,11 @@ if __name__ == "__main__":
                 x,y = detect_lane(img)
                 k = cv2.waitKey(1)
                 len_x, len_y = img.shape[1], img.shape[0]
-                steering_angle = math.degrees(math.atan((len_x/2-x)/(len_y - y)))
-                print(angle)
-                px.set_dir_servo_angle(steering_angle)
+                steering_angle = math.degrees(math.atan((len_x/2-x)/(len_y - y)))/2
+                if(abs(steering_angle)>40):
+                    steering_angle = steering_angle/abs(steering_angle)*40
+                print(steering_angle)
+                px.set_dir_servo_angle(-steering_angle)
                 px.forward(px_power - abs(steering_angle)/4)
                 rawCapture.truncate(0)
 
