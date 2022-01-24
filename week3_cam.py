@@ -113,14 +113,16 @@ def detect_lane(frame):
     
     return lane_lines
 
-def detect_lane(frame):
-    
-    edges = detect_edges(frame)
-    cropped_edges = region_of_interest(edges)
-    line_segments = detect_line_segments(cropped_edges)
-    lane_lines = average_slope_intercept(frame, line_segments)
-    
-    return lane_lines
+def display_lines(frame, lines, line_color=(0, 255, 0), line_width=2):
+    line_image = np.zeros_like(frame)
+    if lines is not None:
+        for line in lines:
+            for x1, y1, x2, y2 in line:
+                cv2.line(line_image, (x1, y1), (x2, y2), line_color, line_width)
+    line_image = cv2.addWeighted(frame, 0.8, line_image, 1, 1)
+    return line_image
+
+
 
 if __name__ == "__main__":
     camera = PiCamera()
@@ -138,7 +140,9 @@ if __name__ == "__main__":
             for frame in camera.capture_continuous(rawCapture, format="bgr",use_video_port=True):# use_video_port=True
                 img = frame.array
                 lane = detect_lane(img)
-                cv2.imshow("edge", lane)
+                lane_lines_image = display_lines(frame, lane_lines)
+                cv2.imshow("lane lines", lane_lines_image)  
+                # cv2.imshow("edge", lane)
                 k = cv2.waitKey(1) & 0xFF
                 # 27 is ESC key
                 if k == 27:
