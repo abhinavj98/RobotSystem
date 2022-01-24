@@ -119,6 +119,7 @@ def display_lines(frame, lines, line_color=(0, 255, 0), line_width=2):
         for line in lines:
             for x1, y1, x2, y2 in line:
                 cv2.line(line_image, (x1, y1), (x2, y2), line_color, line_width)
+
     line_image = cv2.addWeighted(frame, 0.8, line_image, 1, 1)
     return line_image
 
@@ -133,15 +134,18 @@ if __name__ == "__main__":
 
     power_val = 0
     px = Picarx()
-    px.set_camera_servo2_angle(-35)
-
+    px.set_camera_servo2_angle(-20)
+    i=0
+    time.sleep(2)
     try:
         while True:
             for frame in camera.capture_continuous(rawCapture, format="bgr",use_video_port=True):# use_video_port=True
                 img = frame.array
                 lane = detect_lane(img)
-                lane_lines_image = display_lines(frame, lane_lines)
-                cv2.imshow("lane lines", lane_lines_image)  
+                print(lane)
+                if(len(lane)!=0):
+                    lane_lines_image = display_lines(frame, lane)
+                    #cv2.imshow("lane lines", lane_lines_image)  
                 # cv2.imshow("edge", lane)
                 k = cv2.waitKey(1) & 0xFF
                 # 27 is ESC key
