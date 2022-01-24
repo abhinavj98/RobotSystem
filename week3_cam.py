@@ -40,16 +40,17 @@ def detect_lane(frame):
     
     mask = detect_mask(frame)
     cropped_mask = region_of_interest(mask)
+    output = cv2.bitwise_and(frame, frame, mask=mask)
     blurred = cv2.GaussianBlur(cropped_mask, (5, 5), 0)
     thresh = cv2.threshold(blurred, 60, 255, cv2.THRESH_BINARY)[1]
-    cv2.imshow("cropped_image", thresh)
-    cnts, _ = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    cnts, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     c = max(cnts, key = cv2.contourArea)
     x,y,w,h = cv2.boundingRect(c)
-
+    print(x,y,w,h)
     # draw the biggest contour (c) in green
     cv2.rectangle(output,(x,y),(x+w,y+h),(0,255,0),2)
 
+    cv2.imshow("cropped_image", output)
     return thresh
 
 
