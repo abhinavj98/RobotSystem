@@ -28,8 +28,8 @@ try:
             lower_blue = np.array([60, 40, 40])
             upper_blue = np.array([150, 255, 255])
             mask = cv2.inRange(hsv, lower_blue, upper_blue)
-            cv2.imshow("video", mask)   
-            cv2.imshow("video", img)
+            cv2.imshow("mask", mask)   
+            cv2.imshow("vid", img)
         
             k = cv2.waitKey(1) & 0xFF
             # 27 is ESC key
