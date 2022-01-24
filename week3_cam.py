@@ -65,11 +65,6 @@ if __name__ == "__main__":
             for frame in camera.capture_continuous(rawCapture, format="bgr",use_video_port=True):# use_video_port=True
                 img = frame.array
                 lane = detect_lane(img)
-                print(lane)
-                if(len(lane)!=0):
-                    lane_lines_image = display_lines(img, lane)
-                    cv2.imshow("lane lines", lane_lines_image)  
-                # cv2.imshow("edge", lane)
                 k = cv2.waitKey(1) & 0xFF
                 # 27 is ESC key
                 if k == 27:
