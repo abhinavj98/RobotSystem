@@ -9,6 +9,7 @@ from picamera.array import PiRGBArray
 from picamera import PiCamera
 import numpy as np
 from utils import run_command
+import math
 def region_of_interest(edges):
     height, width = edges.shape
     mask = np.zeros_like(edges)
@@ -50,7 +51,7 @@ def detect_lane(frame):
     # draw the biggest contour (c) in green
     cv2.circle(output,(int(x+w/2),int(y+h/2)),2,(0,255,0),4)
     cv2.imshow("cropped_image", output)
-    return thresh
+    return int(x+w/2), int(y+h/2)
 
 
 
@@ -70,49 +71,14 @@ if __name__ == "__main__":
         while True:
             for frame in camera.capture_continuous(rawCapture, format="bgr",use_video_port=True):# use_video_port=True
                 img = frame.array
-                lane = detect_lane(img)
-                k = cv2.waitKey(1) & 0xFF
-                # 27 is ESC key
-                if k == 27:
-                    camera.close()
-                    continue
-                elif k == ord('o'):
-                    if power_val <=90:
-                        power_val += 10
-                        print("power_val:",power_val)  # motor power up
-                elif k == ord('p'):
-                    if power_val >=10:
-                        power_val -= 10
-                        print("power_val:",power_val)  # motor power up down
-                elif k == ord('w'):
-                    px.set_dir_servo_angle(0) # go forward
-                    px.forward(power_val) 
-                elif k == ord('a'):
-                    px.set_dir_servo_angle(-30) # go left
-                    px.forward(power_val)
-                elif k == ord('s'):
-                    px.set_dir_servo_angle(0) # go back
-                    px.backward(power_val)
-                elif k == ord('d'):
-                    px.set_dir_servo_angle(30) # go right
-                    px.forward(power_val)
-                elif k == ord('f'):    
-                    px.stop()  # stop
-
+                x,y = detect_lane(img)
+                len_x, len_y = img.shape[0], img.shape[1]
+                angle = math.degrees(math.atan(len_x/2-x)/(len_y - y)))
+                print(angle)
             
-                elif k == ord('t'):   # shoot
-                    camera.close()
-                    break
                 rawCapture.truncate(0)
 
-            print("take a photo wait...")
-            picture_time = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-            picture_path = '/home/pi/Pictures/' + picture_time + '.jpg'
-
-            a_t = "sudo raspistill -t 250  -w 2592 -h 1944 " + " -o " + picture_path
-
-            print(a_t)
-            run_command(a_t)
+            # run_command(a_t)
 
             # Vilib.shuttle_button() 
             camera = PiCamera()
