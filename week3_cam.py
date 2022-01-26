@@ -11,6 +11,7 @@ import numpy as np
 from utils import run_command
 import math
 def region_of_interest(edges):
+    """Crops image to focus only on bottom half"""
     height, width = edges.shape
     mask = np.zeros_like(edges)
 
@@ -27,18 +28,16 @@ def region_of_interest(edges):
     return cropped_edges
 
 def detect_mask(frame):
-    # filter for blue lane lines
+    """Detect blue line from image"""    
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     lower_blue = np.array([90, 90, 50])
     upper_blue = np.array([120, 255, 255])
     mask = cv2.inRange(hsv, lower_blue, upper_blue)
     
-    # detect edges
-    #edges = cv2.Canny(mask, 200, 400)
     return mask
 
 def detect_lane(frame):
-    
+    """Crops image to the bottom half and makes a  contour around the mask - Center of contour needs to be followed"""
     mask = detect_mask(frame)
     cropped_mask = region_of_interest(mask)
     output = cv2.bitwise_and(frame, frame, mask=mask)
@@ -76,6 +75,7 @@ if __name__ == "__main__":
                     x,y = detect_lane(img)
                     k = cv2.waitKey(1)
                     len_x, len_y = img.shape[1], img.shape[0]
+                    #Calculate steering angle by finding the angle in degrees between center of frame wrt detected center of line
                     steering_angle = math.degrees(math.atan((len_x/2-x)/(len_y - y)))/2
                     if(abs(steering_angle)>40):
                         steering_angle = steering_angle/abs(steering_angle)*40

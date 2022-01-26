@@ -8,12 +8,14 @@ import time
 # from adc import ADC
 
 class Grayscale_Module(object):
-    def __init__(self, max = 1500, min = 750, target = 'light'):
+    def __init__(self, max = 1500, min = 750, target = 'light', sensititvity = 0.5):
         self.chn_0 = ADC("A0")
         self.chn_1 = ADC("A1")
         self.chn_2 = ADC("A2")
         self.max =  max
         self.min = min
+        self.sensititvity = sensititvity
+        self.target = target
 
     def get_grayscale_data(self):
         adc_value_list = []
@@ -42,7 +44,10 @@ class Controller():
                 data[j]=self.gm.max
             elif i < self.gm.min:
                 data[j] = self.gm.min
-        loc = 0.6*(data[2] - data[0])/data[1] + 0.4*self.loc
+        loc = (0.6*(data[2] - data[0])/data[1] + 0.4*self.loc)*gm.sensititvity
+        if gm.target == 'dark':
+            loc = loc*-1
+
         self.loc = loc
         print(loc)
         return loc
