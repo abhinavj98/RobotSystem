@@ -76,7 +76,7 @@ if __name__ == "__main__":
                     k = cv2.waitKey(1)
                     len_x, len_y = img.shape[1], img.shape[0]
                     #Calculate steering angle by finding the angle in degrees between center of frame wrt detected center of line
-                    steering_angle = math.degrees(math.atan((len_x/2-x)/(len_y - y)))/2
+                    steering_angle = math.degrees(math.atan((len_x/2-x)/(len_y - y)))/4
                     if(abs(steering_angle)>40):
                         steering_angle = steering_angle/abs(steering_angle)*40
                     print(steering_angle)
