@@ -69,14 +69,14 @@ class Interpretor():
         return loc
     
 class Controller():
-    """Consumer function that reads location and controls the motors""":
+    """Consumer function that reads location and controls the motors"""
     def __init__(self, px_power, delay = 0.2):
         self.px = Picarx()
         self.px_power = px_power
     def forward(self):
         steering_angle = control_bus.read()*40
-        px.set_dir_servo_angle(steering_angle)
-        px.forward(px_power - abs(steering_angle)/4) 
+        self.px.set_dir_servo_angle(steering_angle)
+        self.px.forward(self.px_power - abs(steering_angle)/4) 
 if __name__=='__main__':
   
   try:
