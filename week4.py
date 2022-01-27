@@ -2,6 +2,7 @@ import sys
 sys.path.insert(0, "./lib/")
 from lib.picarx_improved import *
 import time
+import concurrent.futures
 # from utils import reset_mcu
 # reset_mcu()
 # from grayscale_module import Grayscale_Module
@@ -25,20 +26,21 @@ class Sensor(object):
         self.max =  max
         self.min = min
         self.bus = bus
-
+        self.delay = delay
     def get_grayscale_data(self):
-        adc_value_list = []
-        adc_value_list.append(self.chn_0.read())
-        adc_value_list.append(self.chn_1.read())
-        adc_value_list.append(self.chn_2.read())
-        for j,i in enumerate(adc_value_list):
-            if i > self.max:
-                adc_value_list[j]=self.max
-            elif i < self.min:
-                adc_value_list[j] = self.min
-        
-        self.bus.write(adc_value_list)
-
+        while True:
+            adc_value_list = []
+            adc_value_list.append(self.chn_0.read())
+            adc_value_list.append(self.chn_1.read())
+            adc_value_list.append(self.chn_2.read())
+            for j,i in enumerate(adc_value_list):
+                if i > self.max:
+                    adc_value_list[j]=self.max
+                elif i < self.min:
+                    adc_value_list[j] = self.min
+            # print("adc")
+            self.bus.write(adc_value_list)
+            time.sleep(self.delay)
     def steering_angle(self):
         pass
     
@@ -49,34 +51,40 @@ class Sensor(object):
 
 class Interpretor():
     """Consumer-Producer function to read sensor data and produce location wrt line"""
-    def __init__(self, gm, bus, sensitivity = 0.5, delay = 0.2, target = 'light'):
-        self.gm = gm
+    def __init__(self, gm_bus, bus, sensitivity = 0.5, delay = 0.2, target = 'light'):
+        self.gm_bus = gm_bus
         self.loc = 0
         self.sensititvity = sensitivity
         self.bus = bus
         self.target = target
+        self.delay = delay
     
     def get_location(self):
-        data = self.gm.bus.read()
-        #Uses the readings to calculate orientation of robot wrt line
-        loc = (0.6*(data[2] - data[0])/data[1] + 0.4*self.loc)*self.sensititvity
-        if self.target == 'dark':
-            loc = loc*-1
+        while True:
+            data = self.gm_bus.read()
+            #Uses the readings to calculate orientation of robot wrt line
+            loc = (0.6*(data[2] - data[0])/data[1] + 0.4*self.loc)*self.sensititvity
+            if self.target == 'dark':
+                loc = loc*-1
+            # print("loc")
+            self.loc = loc
+            self.bus.write(loc)
+            time.sleep(self.delay)
 
-        self.loc = loc
-        self.bus.write(loc)
-
-        return loc
     
 class Controller():
     """Consumer function that reads location and controls the motors"""
-    def __init__(self, px_power, delay = 0.2):
+    def __init__(self, control_bus, px_power, delay = 0.2):
         self.px = Picarx()
         self.px_power = px_power
+        self.control_bus = control_bus
+        self.delay = delay
     def forward(self):
-        steering_angle = control_bus.read()*40
-        self.px.set_dir_servo_angle(steering_angle)
-        self.px.forward(self.px_power - abs(steering_angle)/4) 
+        while True:
+            steering_angle = self.control_bus.read()*40
+            self.px.set_dir_servo_angle(steering_angle)
+            self.px.forward(self.px_power - abs(steering_angle)/4)
+            time.sleep(self.delay)
 if __name__=='__main__':
   
   try:
@@ -84,13 +92,15 @@ if __name__=='__main__':
     control_bus = Bus(0) 
 
     gm = Sensor(gm_bus)
-    interpret = Interpretor(gm, control_bus, 1)
-    p_control = Controller(40)
-    while True:
-        gm.get_grayscale_data()
-        interpret.get_location()
-        p_control.forward()
-       
+    interpret = Interpretor(gm_bus, control_bus, 1)
+    p_control = Controller(control_bus, 40)
+    with concurrent.futures.ThreadPoolExecutor(max_workers =3) as executor:
+        es = executor.submit(gm.get_grayscale_data)
+        ei = executor.submit(interpret.get_location)
+        ec = executor.submit(p_control.forward)
+    print(es.result())
+    print(ei.result())
+    print(ec.result())
         #time.sleep(0.01)
   finally:
       p_control.px.stop()
