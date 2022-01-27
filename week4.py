@@ -6,9 +6,18 @@ import time
 # reset_mcu()
 # from grayscale_module import Grayscale_Module
 # from adc import ADC
+class Bus():
+    def __init__(self, default):
+        self.message = default
 
+    def read(self):
+        return self.message
+    
+    def write(self, message):
+        self.message = message
+        
 class Grayscale_Module(object):
-    def __init__(self, max = 1500, min = 750, target = 'light', sensititvity = 0.5):
+    def __init__(self, bus, max = 1500, min = 750, target = 'light', sensititvity = 0.5):
         self.chn_0 = ADC("A0")
         self.chn_1 = ADC("A1")
         self.chn_2 = ADC("A2")
@@ -16,13 +25,14 @@ class Grayscale_Module(object):
         self.min = min
         self.sensititvity = sensititvity
         self.target = target
+        self.bus = bus
 
     def get_grayscale_data(self):
         adc_value_list = []
         adc_value_list.append(self.chn_0.read())
         adc_value_list.append(self.chn_1.read())
         adc_value_list.append(self.chn_2.read())
-        return adc_value_list
+        self.bus.write(adc_value_list)
 
     def steering_angle(self):
         pass
@@ -33,12 +43,13 @@ class Grayscale_Module(object):
         return self.ref
 
 class Controller():
-    def __init__(self, gm):
+    def __init__(self, gm, bus):
         self.gm = gm
         self.loc = 0
+        self.bus = bus
     
     def get_location(self):
-        data = self.gm.get_grayscale_data()
+        data = self.gm.bus.read()
         for j,i in enumerate(data):
             if i > self.gm.max:
                 data[j]=self.gm.max
@@ -50,18 +61,21 @@ class Controller():
             loc = loc*-1
 
         self.loc = loc
-        print(loc)
+        self.bus.write(loc)
+
         return loc
     
 
 if __name__=='__main__':
   px = Picarx()
   try:
-    gm = Grayscale_Module()
-    p_control = Controller(gm)
+    gm_bus = Bus([0,0,0])
+    control_bus = Bus(0) 
+    gm = Grayscale_Module(gm_bus)
+    p_control = Controller(gm, control_bus)
     px_power = 40
     while True:
-        steering_angle = p_control.get_location()*40
+        steering_angle = control_bus.read()*40
         px.set_dir_servo_angle(steering_angle)
         px.forward(px_power - abs(steering_angle)/4) 
         #time.sleep(0.01)
