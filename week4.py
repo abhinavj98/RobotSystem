@@ -17,14 +17,12 @@ class Bus():
         self.message = message
         
 class Grayscale_Module(object):
-    def __init__(self, bus, max = 1500, min = 750, target = 'light', sensititvity = 0.5):
+    def __init__(self, bus, max = 1500, min = 750):
         self.chn_0 = ADC("A0")
         self.chn_1 = ADC("A1")
         self.chn_2 = ADC("A2")
         self.max =  max
         self.min = min
-        self.sensititvity = sensititvity
-        self.target = target
         self.bus = bus
 
     def get_grayscale_data(self):
@@ -32,6 +30,12 @@ class Grayscale_Module(object):
         adc_value_list.append(self.chn_0.read())
         adc_value_list.append(self.chn_1.read())
         adc_value_list.append(self.chn_2.read())
+        for j,i in enumerate(adc_value_list):
+            if i > self.max:
+                adc_value_list[j]=self.max
+            elif i < self.min:
+                adc_value_list[j] = self.min
+        
         self.bus.write(adc_value_list)
 
     def steering_angle(self):
@@ -43,22 +47,18 @@ class Grayscale_Module(object):
         return self.ref
 
 class Controller():
-    def __init__(self, gm, sensitivibus):
+    def __init__(self, gm, bus, sensitivity = 0.5, target = 'light'):
         self.gm = gm
         self.loc = 0
+        self.sensititvity = sensitivity
         self.bus = bus
+        self.target = target
     
     def get_location(self):
         data = self.gm.bus.read()
-        print(data)
-        for j,i in enumerate(data):
-            if i > self.gm.max:
-                data[j]=self.gm.max
-            elif i < self.gm.min:
-                data[j] = self.gm.min
         #Uses the readings to calculate orientation of robot wrt line
-        loc = (0.6*(data[2] - data[0])/data[1] + 0.4*self.loc)*gm.sensititvity
-        if gm.target == 'dark':
+        loc = (0.6*(data[2] - data[0])/data[1] + 0.4*self.loc)*self.sensititvity
+        if self.target == 'dark':
             loc = loc*-1
 
         self.loc = loc
@@ -73,9 +73,10 @@ if __name__=='__main__':
     gm_bus = Bus([0,0,0])
     control_bus = Bus(0) 
     gm = Grayscale_Module(gm_bus)
-    p_control = Controller(gm, control_bus)
+    p_control = Controller(gm, control_bus, 1)
     px_power = 40
     while True:
+        gm.get_grayscale_data()
         p_control.get_location()
         steering_angle = control_bus.read()*40
         px.set_dir_servo_angle(steering_angle)
