@@ -3,6 +3,7 @@ sys.path.insert(0, "./lib/")
 from lib.picarx_improved import *
 import time
 import concurrent.futures
+from readerwriterlock import rwlock
 # from utils import reset_mcu
 # reset_mcu()
 # from grayscale_module import Grayscale_Module
@@ -10,12 +11,14 @@ import concurrent.futures
 class Bus():
     def __init__(self, default):
         self.message = default
-
+        self.lock = rwlock.RWLockWriteD()
     def read(self):
-        return self.message
+        with self.lock.gen_rlock():
+            return self.message
     
     def write(self, message):
-        self.message = message
+        with self.lock.gen_wlock():
+            self.message = message
         
 class Sensor(object):
     """Producer function for grayscale module"""
