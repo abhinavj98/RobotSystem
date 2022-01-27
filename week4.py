@@ -43,13 +43,14 @@ class Grayscale_Module(object):
         return self.ref
 
 class Controller():
-    def __init__(self, gm, bus):
+    def __init__(self, gm, sensitivibus):
         self.gm = gm
         self.loc = 0
         self.bus = bus
     
     def get_location(self):
         data = self.gm.bus.read()
+        print(data)
         for j,i in enumerate(data):
             if i > self.gm.max:
                 data[j]=self.gm.max
@@ -75,6 +76,7 @@ if __name__=='__main__':
     p_control = Controller(gm, control_bus)
     px_power = 40
     while True:
+        p_control.get_location()
         steering_angle = control_bus.read()*40
         px.set_dir_servo_angle(steering_angle)
         px.forward(px_power - abs(steering_angle)/4) 
