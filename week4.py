@@ -16,8 +16,9 @@ class Bus():
     def write(self, message):
         self.message = message
         
-class Grayscale_Module(object):
-    def __init__(self, bus, max = 1500, min = 750):
+class Sensor(object):
+    """Producer function for grayscale module"""
+    def __init__(self, bus, delay = 0.2, max = 1500, min = 750):
         self.chn_0 = ADC("A0")
         self.chn_1 = ADC("A1")
         self.chn_2 = ADC("A2")
@@ -46,8 +47,9 @@ class Grayscale_Module(object):
         self.ref = sum(data)/len(data)
         return self.ref
 
-class Controller():
-    def __init__(self, gm, bus, sensitivity = 0.5, target = 'light'):
+class Interpretor():
+    """Consumer-Producer function to read sensor data and produce location wrt line"""
+    def __init__(self, gm, bus, sensitivity = 0.5, delay = 0.2, target = 'light'):
         self.gm = gm
         self.loc = 0
         self.sensititvity = sensitivity
@@ -66,21 +68,29 @@ class Controller():
 
         return loc
     
-
-if __name__=='__main__':
-  px = Picarx()
-  try:
-    gm_bus = Bus([0,0,0])
-    control_bus = Bus(0) 
-    gm = Grayscale_Module(gm_bus)
-    p_control = Controller(gm, control_bus, 1)
-    px_power = 40
-    while True:
-        gm.get_grayscale_data()
-        p_control.get_location()
+class Controller():
+    """Consumer function that reads location and controls the motors""":
+    def __init__(self, px_power, delay = 0.2):
+        self.px = Picarx()
+        self.px_power = px_power
+    def forward(self):
         steering_angle = control_bus.read()*40
         px.set_dir_servo_angle(steering_angle)
         px.forward(px_power - abs(steering_angle)/4) 
+if __name__=='__main__':
+  
+  try:
+    gm_bus = Bus([0,0,0])
+    control_bus = Bus(0) 
+
+    gm = Sensor(gm_bus)
+    interpret = Interpretor(gm, control_bus, 1)
+    p_control = Controller(40)
+    while True:
+        gm.get_grayscale_data()
+        interpret.get_location()
+        p_control.forward()
+       
         #time.sleep(0.01)
   finally:
-      px.stop()
+      p_control.px.stop()
