@@ -3,7 +3,7 @@ sys.path.insert(0, "./lib/")
 from lib.picarx_improved import *
 from RossROS.rossros import *
 
-        
+
 class Sensor(object):
     """Producer function for grayscale module"""
     def __init__(self,  max = 1500, min = 750):
@@ -12,7 +12,10 @@ class Sensor(object):
         self.chn_2 = ADC("A2")
         self.max =  max
         self.min = min
-       
+
+    @log_on_start(DEBUG, "Starting Sensor function")
+    @log_on_error(DEBUG, "Encountered an error while executing consumer-producer")
+    @log_on_end(DEBUG, "Closing down Sensor function")
     def get_grayscale_data(self):
         adc_value_list = []
         adc_value_list.append(self.chn_0.read())
@@ -29,6 +32,7 @@ class Sensor(object):
         self.ref = sum(data)/len(data)
         return self.ref
 
+
 class Interpretor():
     """Consumer-Producer function to read sensor data and produce location wrt line"""
     def __init__(self, sensitivity = 0.5, delay = 0.2, target = 'light'):
@@ -36,7 +40,10 @@ class Interpretor():
         self.sensititvity = sensitivity
         self.target = target
         self.delay = delay
-    
+
+    @log_on_start(DEBUG, "Starting Interpretor service")
+    @log_on_error(DEBUG, "Encountered an error while executing consumer-producer")
+    @log_on_end(DEBUG, "Closing down Interpretor service")
     def get_location(self, data):
         #Uses the readings to calculate orientation of robot wrt line
         print(data)
@@ -44,13 +51,16 @@ class Interpretor():
         if self.target == 'dark':
             loc = loc*-1
         self.loc = loc
-    
+
 class Controller():
     """Consumer function that reads location and controls the motors"""
     def __init__(self, px_power):
         self.px = Picarx()
         self.px_power = px_power
 
+    @log_on_start(DEBUG, "Starting Control service")
+    @log_on_error(DEBUG, "Encountered an error while executing consumer-producer")
+    @log_on_end(DEBUG, "Closing down Control service")
     def forward(self, data):
         while True:
             steering_angle = data*40
@@ -67,11 +77,12 @@ if __name__=='__main__':
     termination_bus = Bus(False, name = "Termination Bus")
     gm_bus = Bus((0,0,0), name = "Input bus")
     control_bus = Bus(0, name = "Output bus") 
-    gm_node = Producer(gm_sensor.get_grayscale_data, gm_bus, termination_busses = termination_bus, name = "Grayscale producer")
    
-    interpret_node = ConsumerProducer(interpret.get_location,gm_bus, control_bus, termination_busses = termination_bus, name = "Interpretor PC")
-    p_control_node = Consumer(control.forward, control_bus, termination_busses = termination_bus, name = "Control consumer") 
-    timer_node = Timer(termination_bus)
+    gm_node = Producer(gm_sensor.get_grayscale_data, gm_bus, delay = 0.2, termination_busses = termination_bus, name = "Grayscale producer")
+    interpret_node = ConsumerProducer(interpret.get_location,gm_bus, control_bus, delay = 0.2, termination_busses = termination_bus, name = "Interpretor PC")
+    p_control_node = Consumer(control.forward, control_bus, delay = 0.2, termination_busses = termination_bus, name = "Control consumer") 
+    timer_node = Timer(termination_bus, name = "Timer node", termination_busses = termination_bus)
+    
     node_list = [timer_node, gm_node, interpret_node, p_control_node]
     runConcurrently(node_list)
   finally:
