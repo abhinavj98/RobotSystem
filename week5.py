@@ -43,7 +43,6 @@ class Interpretor():
    
     def get_location(self, data):
         #Uses the readings to calculate orientation of robot wrt line
-        print(data)
         loc = (0.6*(data[2] - data[0])/data[1] + 0.4*self.loc)*self.sensititvity
         if self.target == 'dark':
             loc = loc*-1
@@ -57,10 +56,9 @@ class Controller():
         self.px_power = px_power
 
     def forward(self, data):
-        while True:
-            steering_angle = data*40
-            self.px.set_dir_servo_angle(steering_angle)
-            self.px.forward(self.px_power - abs(steering_angle)/4)
+        steering_angle = data*40
+        self.px.set_dir_servo_angle(steering_angle)
+        self.px.forward(self.px_power - abs(steering_angle)/4)
 
 if __name__=='__main__':
   
@@ -73,11 +71,11 @@ if __name__=='__main__':
     gm_bus = Bus((0,0,0), name = "Input bus")
     control_bus = Bus(0, name = "Output bus") 
    
-    gm_node = Producer(gm_sensor.get_grayscale_data, gm_bus, delay = 0.2, termination_busses = termination_bus, name = "Grayscale producer")
-    interpret_node = ConsumerProducer(interpret.get_location, input_busses = gm_bus, output_busses = control_bus, delay = 0.2, termination_busses = termination_bus, name = "Interpretor PC")
-    p_control_node = Consumer(control.forward, control_bus, delay = 0.2, termination_busses = termination_bus, name = "Control consumer") 
-    printer_node = Printer(gm_bus)
-    timer_node = Timer(termination_bus, name = "Timer node", termination_busses = termination_bus)
+    gm_node = Producer(gm_sensor.get_grayscale_data, gm_bus, termination_busses = termination_bus, name = "Grayscale producer")
+    interpret_node = ConsumerProducer(interpret.get_location, input_busses = gm_bus, output_busses = control_bus, termination_busses = termination_bus, name = "Interpretor PC")
+    p_control_node = Consumer(control.forward, control_bus, termination_busses = termination_bus, name = "Control consumer") 
+    printer_node = Printer(control_bus)
+    timer_node = Timer(termination_bus, duration = 0, name = "Timer node", termination_busses = termination_bus)
     
     node_list = [timer_node, gm_node, interpret_node, p_control_node, printer_node]
     runConcurrently(node_list)
