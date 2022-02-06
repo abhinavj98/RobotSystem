@@ -26,7 +26,8 @@ class Sensor(object):
                 adc_value_list[j]=self.max
             elif i < self.min:
                 adc_value_list[j] = self.min
-    
+        return adc_value_list
+
     def calibrate(self):
         data = self.get_grayscale_data()
         self.ref = sum(data)/len(data)
@@ -51,6 +52,7 @@ class Interpretor():
         if self.target == 'dark':
             loc = loc*-1
         self.loc = loc
+        return loc
 
 class Controller():
     """Consumer function that reads location and controls the motors"""
