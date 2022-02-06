@@ -2,8 +2,9 @@ import sys
 sys.path.insert(0, "./lib/")
 from lib.picarx_improved import *
 from RossROS.rossros import *
+import logging
 
-
+logging.setLevel(logging.INFO)
 class Sensor(object):
     """Producer function for grayscale module"""
     def __init__(self,  max = 1500, min = 750):
