@@ -4,7 +4,7 @@ from lib.picarx_improved import *
 from RossROS.rossros import *
 import logging
 
-logging.setLevel(logging.INFO)
+logging.getLogger().setLevel(logging.INFO)
 class Sensor(object):
     """Producer function for grayscale module"""
     def __init__(self,  max = 1500, min = 750):
