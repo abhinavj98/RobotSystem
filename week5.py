@@ -1,10 +1,6 @@
 import sys
 sys.path.insert(0, "./lib/")
-# sys.path.insert(0, "./RossRos/")
 from lib.picarx_improved import *
-import time
-import concurrent.futures
-from readerwriterlock import rwlock
 from RossROS.rossros import *
 
         
@@ -43,6 +39,7 @@ class Interpretor():
     
     def get_location(self, data):
         #Uses the readings to calculate orientation of robot wrt line
+        print(data)
         loc = (0.6*(data[2] - data[0])/data[1] + 0.4*self.loc)*self.sensititvity
         if self.target == 'dark':
             loc = loc*-1
@@ -66,7 +63,7 @@ if __name__=='__main__':
     gm_sensor = Sensor()
     interpret = Interpretor()
     control = Controller(40)
-    gm_bus = Bus([0,0,0], name = "Input bus")
+    gm_bus = Bus((0,0,0), name = "Input bus")
     control_bus = Bus(0, name = "Output bus") 
     gm_node = Producer(gm_sensor.get_grayscale_data, gm_bus, name = "Grayscale producer")
     interpret_node = ConsumerProducer(interpret.get_location,gm_bus, control_bus, name = "Interpretor PC")
