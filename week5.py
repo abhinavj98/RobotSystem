@@ -63,12 +63,16 @@ if __name__=='__main__':
     gm_sensor = Sensor()
     interpret = Interpretor()
     control = Controller(40)
+   
+    termination_bus = Bus(False, name = "Termination Bus")
     gm_bus = Bus((0,0,0), name = "Input bus")
     control_bus = Bus(0, name = "Output bus") 
-    gm_node = Producer(gm_sensor.get_grayscale_data, gm_bus, name = "Grayscale producer")
-    interpret_node = ConsumerProducer(interpret.get_location,gm_bus, control_bus, name = "Interpretor PC")
-    p_control_node = Consumer(control.forward, control_bus, name = "Control consumer")
-    node_list = [gm_node, interpret_node, p_control_node]
+    gm_node = Producer(gm_sensor.get_grayscale_data, gm_bus, termination_busses = termination_bus, name = "Grayscale producer")
+   
+    interpret_node = ConsumerProducer(interpret.get_location,gm_bus, control_bus, termination_busses = termination_bus, name = "Interpretor PC")
+    p_control_node = Consumer(control.forward, control_bus, termination_busses = termination_bus, name = "Control consumer") 
+    timer_node = Timer(termination_bus)
+    node_list = [timer_node, gm_node, interpret_node, p_control_node]
     runConcurrently(node_list)
   finally:
     control.px.stop()
