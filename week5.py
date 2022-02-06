@@ -3,7 +3,6 @@ sys.path.insert(0, "./lib/")
 from lib.picarx_improved import *
 from RossROS.rossros import *
 import logging
-
 logging.getLogger().setLevel(logging.INFO)
 class Sensor(object):
     """Producer function for grayscale module"""
@@ -14,9 +13,7 @@ class Sensor(object):
         self.max =  max
         self.min = min
 
-    @log_on_start(DEBUG, "Starting Sensor function")
-    @log_on_error(DEBUG, "Encountered an error while executing consumer-producer")
-    @log_on_end(DEBUG, "Closing down Sensor function")
+    
     def get_grayscale_data(self):
         adc_value_list = []
         adc_value_list.append(self.chn_0.read())
@@ -43,9 +40,7 @@ class Interpretor():
         self.target = target
         self.delay = delay
 
-    @log_on_start(DEBUG, "Starting Interpretor service")
-    @log_on_error(DEBUG, "Encountered an error while executing consumer-producer")
-    @log_on_end(DEBUG, "Closing down Interpretor service")
+   
     def get_location(self, data):
         #Uses the readings to calculate orientation of robot wrt line
         print(data)
@@ -61,9 +56,6 @@ class Controller():
         self.px = Picarx()
         self.px_power = px_power
 
-    @log_on_start(DEBUG, "Starting Control service")
-    @log_on_error(DEBUG, "Encountered an error while executing consumer-producer")
-    @log_on_end(DEBUG, "Closing down Control service")
     def forward(self, data):
         while True:
             steering_angle = data*40
