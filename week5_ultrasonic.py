@@ -53,19 +53,20 @@ class Interpretor():
         self.delay = delay
 
    
-    def get_location(self, data):
+    def get_location(self, data, distance):
         #Uses the readings to calculate orientation of robot wrt line
         loc = (0.6*(data[0][2] - data[0][0])/data[0][1] + 0.4*self.loc)*self.sensititvity
         if self.target == 'dark':
             loc = loc*-1
         self.loc = loc
-        distance = data[1]
+        # distance = data[1]
         stop = 0
         if distance > 0 and distance < 300:
                 if distance < 25:
                     stop = 1
                 else:
                     stop = 0
+
         return loc, stop
 
 class Controller():
