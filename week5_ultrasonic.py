@@ -3,7 +3,7 @@ sys.path.insert(0, "./lib/")
 from lib.picarx_improved import *
 from RossROS.rossros import *
 import logging
-logging.getLogger().setLevel(logging.INFO)
+#logging.getLogger().setLevel(logging.INFO)
 from ultrasonic import *
 class Sensor(object):
     """Producer function for grayscale module"""
@@ -67,7 +67,7 @@ class Interpretor():
                 else:
                     stop = 0
 
-        return loc, stop
+        return (loc, stop)
 
 class Controller():
     """Consumer function that reads location and controls the motors"""
@@ -96,11 +96,11 @@ if __name__=='__main__':
     us_bus = Bus(0, name = "Input_us bus")
     control_bus = Bus(0, name = "Output bus") 
    
-    gm_node = Producer(gm_sensor.get_grayscale_data, gm_bus, termination_busses = termination_bus, name = "Grayscale producer")
-    us_node = Producer(us_sensor.get_ultrasonic_data, us_bus, termination_busses = termination_bus, name = "Ultrasonic producer")
-    interpret_node = ConsumerProducer(interpret.get_location, input_busses = (gm_bus, us_bus), output_busses = control_bus, termination_busses = termination_bus, name = "Interpretor PC")
-    p_control_node = Consumer(control.forward, control_bus, termination_busses = termination_bus, name = "Control consumer") 
-    printer_node = Printer(control_bus)
+    gm_node = Producer(gm_sensor.get_grayscale_data, gm_bus, termination_busses = termination_bus, name = "Grayscale producer", delay = 0.01)
+    us_node = Producer(us_sensor.get_ultrasonic_data, us_bus, termination_busses = termination_bus, name = "Ultrasonic producer", delay = 0.01)
+    interpret_node = ConsumerProducer(interpret.get_location, input_busses = (gm_bus, us_bus), output_busses = control_bus, termination_busses = termination_bus, name = "Interpretor PC"), delay = 0.01
+    p_control_node = Consumer(control.forward, control_bus, termination_busses = termination_bus, name = "Control consumer", delay = 0.01) 
+    printer_node = Printer(control_bus, delay = 0.01)
     timer_node = Timer(termination_bus, duration = 0, name = "Timer node", termination_busses = termination_bus)
     
     node_list = [timer_node, gm_node, us_node, interpret_node, p_control_node, printer_node]
