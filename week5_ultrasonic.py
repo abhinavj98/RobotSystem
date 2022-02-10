@@ -55,7 +55,7 @@ class Interpretor():
    
     def get_location(self, data, distance):
         #Uses the readings to calculate orientation of robot wrt line
-        loc = (0.6*(data[0][2] - data[0][0])/data[0][1] + 0.4*self.loc)*self.sensititvity
+        loc = (0.6*(data[2] - data[0])/data[1] + 0.4*self.loc)*self.sensititvity
         if self.target == 'dark':
             loc = loc*-1
         self.loc = loc
