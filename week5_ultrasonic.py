@@ -67,7 +67,7 @@ class Interpretor():
                 else:
                     stop = 0
 
-        return (loc, stop)
+        return ([loc, stop])
 
 class Controller():
     """Consumer function that reads location and controls the motors"""
@@ -76,6 +76,7 @@ class Controller():
         self.px_power = px_power
 
     def forward(self, data):
+        print(data)
         steering_angle = data[0]*40
         if(data[1] == 1):
             self.px.stop()
@@ -94,11 +95,11 @@ if __name__=='__main__':
     termination_bus = Bus(False, name = "Termination Bus")
     gm_bus = Bus((0,0,0), name = "Inpu_gm bus")
     us_bus = Bus(0, name = "Input_us bus")
-    control_bus = Bus(0, name = "Output bus") 
+    control_bus = Bus([0,0], name = "Output bus") 
    
     gm_node = Producer(gm_sensor.get_grayscale_data, gm_bus, termination_busses = termination_bus, name = "Grayscale producer", delay = 0.01)
     us_node = Producer(us_sensor.get_ultrasonic_data, us_bus, termination_busses = termination_bus, name = "Ultrasonic producer", delay = 0.01)
-    interpret_node = ConsumerProducer(interpret.get_location, input_busses = (gm_bus, us_bus), output_busses = control_bus, termination_busses = termination_bus, name = "Interpretor PC"), delay = 0.01
+    interpret_node = ConsumerProducer(interpret.get_location, input_busses = (gm_bus, us_bus), output_busses = control_bus, termination_busses = termination_bus, name = "Interpretor PC", delay = 0.01)
     p_control_node = Consumer(control.forward, control_bus, termination_busses = termination_bus, name = "Control consumer", delay = 0.01) 
     printer_node = Printer(control_bus, delay = 0.01)
     timer_node = Timer(termination_bus, duration = 0, name = "Timer node", termination_busses = termination_bus)
