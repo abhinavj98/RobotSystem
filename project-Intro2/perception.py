@@ -43,7 +43,6 @@ if __name__ == "__main__":
     while True:
         ret, frame = cam.read()
         
-        # print(thresh_img.shape)
         frame = cam.find_contours(frame)
 
         frame = cv2.resize(frame, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
