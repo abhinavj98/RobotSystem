@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 import atexit
 import time
 class perception():
@@ -29,10 +30,13 @@ class perception():
         
         if(len(contours) != 0):
             c = max(contours, key = cv2.contourArea)
-            x,y,w,h = cv2.boundingRect(c)
-            print(x,y,w,h)
+            rect = cv2.minAreaRect(c)
+            box = cv2.boxPoints(rect)
+            box = np.int0(box)
+        
             # draw contours on the original image
-            cv2.rectangle(image_copy,(x,y),(x+w,y+h),(0,255,0),2)
+            cv2.drawContours(image_copy, [box], -1, (0,255,0), 2)
+            # cv2.rectangle(image_copy,(int(x),int(y)),(int(x+w),int(y+h)),(0,255,0),2)
         return image_copy
                
 
