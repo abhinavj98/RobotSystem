@@ -95,6 +95,7 @@ class perception():
         return img, valid, areaMaxContour
 
 class motion():
+    """Class to control arm movement and corresponding kinematics"""
     def __init__(self, size):
         self.size = size
         self.last_x = 0
