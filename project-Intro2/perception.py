@@ -21,13 +21,16 @@ class perception():
     @staticmethod
     def find_contours(img):
         #Grayscale image
+        #Do you wann blur and close?
         thresh_img = cam.thresh(img)
         #detect the contours on the binary image using cv2.CHAIN_APPROX_NONE
         contours, hierarchy = cv2.findContours(thresh_img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[-2:]
-        print(contours)
+        c = max(contours, key = cv2.contourArea)
+        x,y,w,h = cv2.boundingRect(c)
+        print(x,y,w,h)
         # draw contours on the original image
         image_copy = img.copy()
-        cv2.drawContours(image=image_copy, contours=contours, contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
+        cv2.rectangle(image_copy,(x,y),(x+w,y+h),(0,255,0),2)
         return image_copy
                
 
