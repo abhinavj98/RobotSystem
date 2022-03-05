@@ -23,7 +23,7 @@ class perception():
         #Grayscale image
         thresh_img = cam.thresh(img)
         #detect the contours on the binary image using cv2.CHAIN_APPROX_NONE
-        contours, hierarchy = cv2.findContours(thresh_img, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)[-2:]
+        contours, hierarchy = cv2.findContours(thresh_img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[-2:]
         print(contours)
         # draw contours on the original image
         image_copy = img.copy()
